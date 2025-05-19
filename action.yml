@@ -1,0 +1,13 @@
+name: R2D2
+description: "Release Request Detection and Deployment"
+
+inputs:
+  tags:
+    description: "All repo tags (newline-separated)"
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
+  env:
+    TAGS: ${{ inputs.tags }}
