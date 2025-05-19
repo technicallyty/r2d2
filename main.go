@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"github.com/technicallyty/r2d2/semver"
 )
 
@@ -16,10 +15,7 @@ const (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// godotenv.Load()
 
 	pkg := getPkgName()
 	requestedVersion, err := getRequestedTag()
