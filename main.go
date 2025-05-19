@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/technicallyty/r2d2/semver"
 )
 
@@ -15,19 +16,23 @@ const (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	pkg := getPkgName()
 	requestedVersion, err := getRequestedTag()
 	if err != nil {
 		log.Fatal(err)
 	}
 	latestTag, err := getLatestTagForPkg(pkg, readRepoTags())
-	hasLatestTag := false
+	hasLatestTag := true
 	if err != nil {
 		if errors.Is(err, ErrTagNotFound) {
-			hasLatestTag = true
+			hasLatestTag = false
 		} else {
 			log.Fatal(err)
-
 		}
 	}
 	// if we have a latest tag, we need to verify that the requested tag matches the update type.
@@ -39,9 +44,10 @@ func main() {
 		}
 	}
 
-	// otherwise we just create the tag regardless.
-	fmt.Println(requestedVersion.String())
-	updateTag(pkg, requestedVersion, os.Getenv(orgEnv), os.Getenv(repoEnv))
+	err = updateTag(pkg, requestedVersion, os.Getenv(orgEnv), os.Getenv(repoEnv))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func verifyUpdate(updateType UpdateType, requestedVersion, latestTag semver.SemVer) error {

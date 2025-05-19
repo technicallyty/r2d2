@@ -5,9 +5,33 @@ inputs:
   tags:
     description: "All repo tags (newline-separated)"
     required: true
+  changelog:
+    description: "The changelog content (multiline or flattened)"
+    required: true
+  changelog-file:
+    description: "Path to the changelog file"
+    required: true
+  commit-sha:
+    description: "The commit SHA to tag"
+    required: true
+  github-token:
+    description: "GitHub auth token with repo access"
+    required: true
+  github-owner:
+    description: "GitHub repository owner/org"
+    required: true
+  github-repo:
+    description: "GitHub repository name"
+    required: true
 
 runs:
   using: docker
-  image: Dockerfile
+  image: ghcr.io/technicallyty/r2d2:latest
   env:
-    TAGS: ${{ inputs.tags }}
+    COSMOS_TAGS: ${{ inputs.tags }}
+    COSMOS_CHANGELOG: ${{ inputs.changelog }}
+    COSMOS_CHANGELOG_FILE: ${{ inputs.changelog-file }}
+    COMMIT_SHA: ${{ inputs.commit-sha }}
+    GITHUB_TOKEN: ${{ inputs.github-token }}
+    GITHUB_REPOSITORY_OWNER: ${{ inputs.github-owner }}
+    GITHUB_REPOSITORY: ${{ inputs.github-repo }}

@@ -19,7 +19,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go binary
-RUN go build -o /go-action main.go
+RUN go build -o /go-action .
 
 # Run the binary when the container starts
 ENTRYPOINT ["/go-action"]
