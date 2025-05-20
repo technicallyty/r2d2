@@ -12,8 +12,14 @@ inputs:
     description: "GitHub auth token with repo access"
     required: false
     default: ${{ github.token }}
-  comsos-tags:
+  cosmos-tags:  # Fixed typo in the input name (was comsos-tags)
     description: "The historical tags starting from the PR merge commit sha"
+    required: true
+  commit-sha:
+    description: "The commit SHA to tag"
+    required: true
+  pr-number:
+    description: "The pull request number"
     required: true
   r2d2-comment-only:
     description: "Whether the job should only comment on the PR instead of creating a tag (true/false)"
@@ -27,7 +33,7 @@ runs:
     COSMOS_CHANGELOG: ${{ inputs.changelog }}
     COSMOS_CHANGELOG_FILE: ${{ inputs.changelog-file }}
     COSMOS_TAGS: ${{ inputs.cosmos-tags }}
-    COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+    COMMIT_SHA: ${{ inputs.commit-sha }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
-    R2D2_PR_NUMBER: ${{ github.event.pull_request.number || github.ref_name }}
+    R2D2_PR_NUMBER: ${{ inputs.pr-number }}
     R2D2_COMMENT_ONLY: ${{ inputs.r2d2-comment-only }}
