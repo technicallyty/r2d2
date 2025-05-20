@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	orgEnv  = "GITHUB_REPOSITORY_OWNER"
-	repoEnv = "GITHUB_REPOSITORY"
+	orgEnv  = "REPO_OWNER"
+	repoEnv = "REPO_NAME"
 )
 
 func main() {
