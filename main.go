@@ -83,7 +83,7 @@ func main() {
 			log.Fatalf("failed to create PR comment: %v", err)
 		}
 	} else {
-		err = updateTag(pkg, requestedVersion, os.Getenv(orgEnv), os.Getenv(repoEnv))
+		err = updateTag(requestedPackage, os.Getenv(orgEnv), os.Getenv(repoEnv))
 		if err != nil {
 			log.Fatal(err)
 		}

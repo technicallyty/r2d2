@@ -60,12 +60,12 @@ func getLatestTagForPkg(pkg string, tags []string) (semver.SemVer, error) {
 	return semver.Parse(latest)
 }
 
-func updateTag(pkg string, ver semver.SemVer, owner, repo string) error {
+func updateTag(pkg Package, owner, repo string) error {
 	commitSHA := os.Getenv(commitShaEnv)
 	ctx := context.Background()
 	client := getGithubClient()
 	ref := &github.Reference{
-		Ref:    github.Ptr("refs/tags/" + pkg + "/" + ver.String()),
+		Ref:    github.Ptr("refs/tags/" + pkg.String()),
 		Object: &github.GitObject{SHA: github.Ptr(commitSHA), Type: github.Ptr("commit")},
 	}
 	_, _, err := client.Git.CreateRef(ctx, owner, repo, ref)
