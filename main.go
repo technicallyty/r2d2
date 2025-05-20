@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/google/go-github/v72/github"
+	"github.com/technicallyty/r2d2/semver"
 )
 
 const (
@@ -19,16 +20,39 @@ const (
 	prNumberEnv    = "R2D2_PR_NUMBER"
 )
 
+type Package struct {
+	Ver  semver.SemVer
+	Name string
+}
+
+func (p Package) String() string {
+	if p.Name == "" {
+		return p.Ver.String()
+	}
+	return p.Name + "/" + p.Ver.String()
+}
+
 func main() {
 	pkg := getPkgName()
+
+	// get the requested version to tag for this package.
 	requestedVersion, err := getRequestedTag()
 	if err != nil {
 		log.Fatal(err)
 	}
+	requestedPackage := Package{
+		Ver:  requestedVersion,
+		Name: pkg,
+	}
 
+	// get the latest tagged version of the package.
 	latestTag, err := getLatestTagForPkg(pkg, readRepoTags())
 	if err != nil && !errors.Is(err, ErrTagNotFound) {
 		log.Fatal(err)
+	}
+	latestPackage := Package{
+		Ver:  latestTag,
+		Name: pkg,
 	}
 
 	var commentOnly bool
@@ -47,9 +71,7 @@ func main() {
 			log.Fatal(err)
 		}
 
-		before := fmt.Sprintf("%s/%s", pkg, latestTag.String())
-		after := fmt.Sprintf("%s/%s", pkg, requestedVersion.String())
-		comment := fmt.Sprintf("This PR will update `%s` to `%s`", before, after)
+		comment := fmt.Sprintf("This PR will update `%s` to `%s`", latestPackage.String(), requestedPackage.String())
 		_, _, err = client.Issues.CreateComment(
 			context.Background(),
 			os.Getenv(orgEnv),
