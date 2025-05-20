@@ -46,7 +46,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		comment := fmt.Sprintf("This PR will update package %q from %s to %s", pkg, latestTag.String(), requestedVersion.String())
+
+		before := fmt.Sprintf("%s/%s", pkg, latestTag.String())
+		after := fmt.Sprintf("%s/%s", pkg, requestedVersion.String())
+		comment := fmt.Sprintf("This PR will update `%s` to `%s`", before, after)
 		_, _, err = client.Issues.CreateComment(
 			context.Background(),
 			os.Getenv(orgEnv),
