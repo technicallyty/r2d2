@@ -2,29 +2,18 @@ name: R2D2tagger
 description: "Release Request Detection and Deployment"
 
 inputs:
-  tags:
-    description: "All repo tags (newline-separated)"
-    required: true
   changelog:
     description: "The changelog content (flattened)"
     required: true
   changelog-file:
     description: "Path to the changelog file"
     required: true
-  commit-sha:
-    description: "The commit SHA to tag"
-    required: true
   github-token:
     description: "GitHub auth token with repo access"
-    required: true
-  github-owner:
-    description: "GitHub repository owner/org"
-    required: true
-  github-repo:
-    description: "GitHub repository name"
-    required: true
-  r2d2-pr-number:
-    description: "The pull request number"
+    required: false
+    default: ${{ github.token }}
+  comsos-tags:
+    description: "The historical tags starting from the PR merge commit sha"
     required: true
   r2d2-comment-only:
     description: "Whether the job should only comment on the PR instead of creating a tag (true/false)"
@@ -35,12 +24,10 @@ runs:
   using: docker
   image: ghcr.io/technicallyty/r2d2:latest
   env:
-    COSMOS_TAGS: ${{ inputs.tags }}
     COSMOS_CHANGELOG: ${{ inputs.changelog }}
     COSMOS_CHANGELOG_FILE: ${{ inputs.changelog-file }}
-    COMMIT_SHA: ${{ inputs.commit-sha }}
+    COSMOS_TAGS: ${{ inputs.cosmos-tags }}
+    COMMIT_SHA: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
-    REPO_OWNER: ${{ inputs.github-owner }}
-    REPO_NAME: ${{ inputs.github-repo }}
-    R2D2_PR_NUMBER: ${{ inputs.r2d2-pr-number }}
+    R2D2_PR_NUMBER: ${{ github.event.pull_request.number || github.ref_name }}
     R2D2_COMMENT_ONLY: ${{ inputs.r2d2-comment-only }}

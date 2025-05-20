@@ -7,14 +7,14 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/google/go-github/v72/github"
 	"github.com/technicallyty/r2d2/semver"
 )
 
 const (
-	orgEnv  = "REPO_OWNER"
-	repoEnv = "REPO_NAME"
+	repoEnv = "GITHUB_REPOSITORY"
 
 	commentOnlyEnv = "R2D2_COMMENT_ONLY"
 	prNumberEnv    = "R2D2_PR_NUMBER"
@@ -64,6 +64,13 @@ func main() {
 		}
 	}
 
+	repository := os.Getenv(repoEnv)
+	split := strings.Split(repository, "/")
+	if len(split) != 2 {
+		log.Fatalf("invalid repository: %s", repository)
+	}
+	org := split[0]
+	repo := split[1]
 	if commentOnly {
 		client := getGithubClient()
 		prNumber, err := strconv.Atoi(os.Getenv(prNumberEnv))
@@ -74,8 +81,8 @@ func main() {
 		comment := fmt.Sprintf("This PR will update `%s` to `%s`", latestPackage.String(), requestedPackage.String())
 		_, _, err = client.Issues.CreateComment(
 			context.Background(),
-			os.Getenv(orgEnv),
-			os.Getenv(repoEnv),
+			org,
+			repo,
 			prNumber,
 			&github.IssueComment{Body: github.Ptr(comment)},
 		)
@@ -83,7 +90,7 @@ func main() {
 			log.Fatalf("failed to create PR comment: %v", err)
 		}
 	} else {
-		err = updateTag(requestedPackage, os.Getenv(orgEnv), os.Getenv(repoEnv))
+		err = updateTag(requestedPackage, org, repo)
 		if err != nil {
 			log.Fatal(err)
 		}
