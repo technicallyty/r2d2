@@ -41,3 +41,4 @@ runs:
     GITHUB_TOKEN: ${{ inputs.github-token }}
     R2D2_PR_NUMBER: ${{ inputs.pr-number }}
     R2D2_COMMENT_ONLY: ${{ inputs.r2d2-comment-only }}
+    GITHUB_REPOSITORY: ${{ inputs.github-repository }}
