@@ -41,9 +41,17 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		client.PullRequests.CreateComment(context.Background(), os.Getenv(orgEnv), os.Getenv(repoEnv), prNumber, &github.PullRequestComment{
-			Body: github.Ptr(fmt.Sprintf("This PR will update package %q from %s to %s", pkg, latestTag.String(), requestedVersion.String())),
-		})
+		comment := fmt.Sprintf("This PR will update package %q from %s to %s", pkg, latestTag.String(), requestedVersion.String())
+		_, _, err = client.Issues.CreateComment(
+			context.Background(),
+			os.Getenv(orgEnv),
+			os.Getenv(repoEnv),
+			prNumber,
+			&github.IssueComment{Body: github.String(comment)},
+		)
+		if err != nil {
+			log.Fatalf("failed to create PR comment: %v", err)
+		}
 	} else {
 		err = updateTag(pkg, requestedVersion, os.Getenv(orgEnv), os.Getenv(repoEnv))
 		if err != nil {
