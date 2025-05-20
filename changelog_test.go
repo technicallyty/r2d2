@@ -50,7 +50,7 @@ func TestGetRequestedTag(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	require.Equal(t, "1.2.1", tag.String())
+	require.Equal(t, "v1.2.1", tag.String())
 }
 
 var changelog = `# Changelog

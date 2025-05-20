@@ -65,11 +65,8 @@ func getLatestTagForPkg(pkg string, tags []string) (semver.SemVer, error) {
 
 func updateTag(pkg string, ver semver.SemVer, owner, repo string) error {
 	commitSHA := os.Getenv(commitShaEnv)
-	token := os.Getenv(githubTokenEnv)
 	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
+	client := getGithubClient()
 	ref := &github.Reference{
 		Ref:    github.Ptr("refs/tags/" + pkg + "/" + ver.String()),
 		Object: &github.GitObject{SHA: github.Ptr(commitSHA), Type: github.Ptr("commit")},
@@ -79,4 +76,13 @@ func updateTag(pkg string, ver semver.SemVer, owner, repo string) error {
 		return fmt.Errorf("unable to create tag: %w", err)
 	}
 	return nil
+}
+
+func getGithubClient() *github.Client {
+	token := os.Getenv(githubTokenEnv)
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
+	tc := oauth2.NewClient(ctx, ts)
+	client := github.NewClient(tc)
+	return client
 }

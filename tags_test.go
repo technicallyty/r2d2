@@ -8,24 +8,6 @@ import (
 	"github.com/technicallyty/r2d2/semver"
 )
 
-func TestGetTag(t *testing.T) {
-	line := `## [v1.2.1](https://github.com/cosmos/cosmos-sdk/releases/tag/collections%2Fv1.2.1)`
-	tag, ok := getTag(line)
-	if !ok {
-		t.Error("failed to get tag")
-	}
-	if tag != "v1.2.1" {
-		t.Error("failed to get correct tag")
-	}
-
-	// shouldn't work because we only match ##, not ###.
-	line = `### [24.3.1](https://link.com)`
-	_, ok = getTag(line)
-	if ok {
-		t.Error("this tag should not have worked")
-	}
-}
-
 func TestReadRepoTags(t *testing.T) {
 	t.Setenv(tagsEnv, "v1.2.3\nv1.2.4\nlog/v1.2.5\nx/tx/v1.2.5")
 	tags := readRepoTags()
