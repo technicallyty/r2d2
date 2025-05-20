@@ -28,7 +28,7 @@ inputs:
 
 runs:
   using: docker
-  image: ghcr.io/technicallyty/r2d2:latest
+  image: docker://ghcr.io/technicallyty/r2d2:latest
   env:
     COSMOS_CHANGELOG: ${{ inputs.changelog }}
     COSMOS_CHANGELOG_FILE: ${{ inputs.changelog-file }}
