@@ -14,8 +14,7 @@ inputs:
     default: ${{ github.token }}
   github-repository:
     description: "The org/repo"
-    required: false
-    default: ${{ github.repository }}
+    required: true
   cosmos-tags:  # Fixed typo in the input name (was comsos-tags)
     description: "The historical tags starting from the PR merge commit sha"
     required: true
