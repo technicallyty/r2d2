@@ -9,5 +9,7 @@ The R2D2 system allows tags to be created from PRs.
 - COSMOS_TAGS: The list of tags from git. 
 - COMMIT_SHA: The sha of the commit we want to tag.
 - GITHUB_TOKEN: Auth token for creating tags.
-- GITHUB_REPOSITORY_OWNER: The name of the github owner/org.
-- GITHUB_REPOSITORY: The name of the github repo.
+- REPO_OWNER: The name of the github owner/org.
+- REPO_NAME: The name of the github repo.
+- R2D2_COMMENT_ONLY(Boolean): wether the job should make a comment on the PR. if this is true, a tag will NOT be created.
+- R2D2_PR_NUMBER: The PR number.

@@ -42,7 +42,6 @@ func getRequestedTag() (semver.SemVer, error) {
 	return ver, nil
 }
 
-// TODO: this needs to be able to handle multipath dirs. Such as x/tx ?
 func getPkgName() string {
 	name := os.Getenv(changeLogFileNameEnv)
 	split := strings.Split(name, "/")
@@ -50,13 +49,4 @@ func getPkgName() string {
 		return ""
 	}
 	return strings.Join(split[0:len(split)-1], "/")
-}
-
-func getTag(line string) (string, bool) {
-	if tagLineRegex.MatchString(line) {
-		leftBrace := strings.Index(line, "[")
-		rightBrace := strings.Index(line, "]")
-		return line[leftBrace+1 : rightBrace], true
-	}
-	return "", false
 }

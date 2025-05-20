@@ -6,7 +6,7 @@ inputs:
     description: "All repo tags (newline-separated)"
     required: true
   changelog:
-    description: "The changelog content (multiline or flattened)"
+    description: "The changelog content (flattened)"
     required: true
   changelog-file:
     description: "Path to the changelog file"
@@ -23,6 +23,13 @@ inputs:
   github-repo:
     description: "GitHub repository name"
     required: true
+  r2d2-pr-number:
+    description: "The pull request number"
+    required: true
+  r2d2-comment-only:
+    description: "Whether the job should only comment on the PR instead of creating a tag (true/false)"
+    required: false
+    default: "false"
 
 runs:
   using: docker
@@ -33,5 +40,7 @@ runs:
     COSMOS_CHANGELOG_FILE: ${{ inputs.changelog-file }}
     COMMIT_SHA: ${{ inputs.commit-sha }}
     GITHUB_TOKEN: ${{ inputs.github-token }}
-    GITHUB_REPOSITORY_OWNER: ${{ inputs.github-owner }}
-    GITHUB_REPOSITORY: ${{ inputs.github-repo }}
+    REPO_OWNER: ${{ inputs.github-owner }}
+    REPO_NAME: ${{ inputs.github-repo }}
+    R2D2_PR_NUMBER: ${{ inputs.r2d2-pr-number }}
+    R2D2_COMMENT_ONLY: ${{ inputs.r2d2-comment-only }}

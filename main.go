@@ -31,10 +31,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	commentOnly, err := strconv.ParseBool(os.Getenv(commentOnlyEnv))
-	if err != nil {
-		log.Fatal(err)
+	var commentOnly bool
+	commentOnlyStr := os.Getenv(commentOnlyEnv)
+	if commentOnlyStr != "" {
+		commentOnly, err = strconv.ParseBool(commentOnlyStr)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
+
 	if commentOnly {
 		client := getGithubClient()
 		prNumber, err := strconv.Atoi(os.Getenv(prNumberEnv))
@@ -47,7 +52,7 @@ func main() {
 			os.Getenv(orgEnv),
 			os.Getenv(repoEnv),
 			prNumber,
-			&github.IssueComment{Body: github.String(comment)},
+			&github.IssueComment{Body: github.Ptr(comment)},
 		)
 		if err != nil {
 			log.Fatalf("failed to create PR comment: %v", err)

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/google/go-github/v72/github"
@@ -27,8 +26,6 @@ const (
 
 var (
 	ErrTagNotFound = errors.New("tag not found")
-
-	tagLineRegex = regexp.MustCompile(`^## \[(v\d+\.\d+\.\d+)\]\([^)]+\) - \d{4}-\d{2}-\d{2}$`)
 )
 
 func readRepoTags() []string {
