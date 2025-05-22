@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/google/go-github/v72/github"
@@ -31,7 +32,9 @@ var (
 func readRepoTags() []string {
 	tags := os.Getenv(tagsEnv)
 	// new lines separate tags. we will read each new line to get the tag.
-	return strings.Split(tags, "\n")
+	tagsSplit := strings.Split(tags, "\n")
+	slices.Sort(tagsSplit)
+	return tagsSplit
 }
 
 func getLatestTagForPkg(pkg string, tags []string) (semver.SemVer, error) {

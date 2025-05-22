@@ -16,6 +16,11 @@ type SemVer struct {
 	extra string
 }
 
+// Compare compares two versions. It returns 0 if the versions are equal, -1 if s1 is less than s2, and 1 if s1 is greater than s2. TODO
+func Compare(s1, s2 SemVer) int {
+	return 0
+}
+
 func (s SemVer) String() string {
 	ver := fmt.Sprintf("v%d.%d.%d", s.major, s.minor, s.patch)
 	if s.extra != "" {
